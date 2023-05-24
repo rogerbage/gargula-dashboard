@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-chart">
+                    <form method="post" action="call_simulation">
+                        <input type="text" name="algo" value="">
+                        {% csrf_token %}
+                        <button onclick="callSimulation(event)">Chamar Simulação</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+    $(document).ready(function () {
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+    });
+
+    function callSimulation(event){
+        event.preventDefault();
+        $.ajax({
+            url: 'call_simulation',
+            type: 'post',
+            data: {
+                algo: "alguma coisa",
+                csrfmiddlewaretoken: document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            dataType: 'json',
+        })
+        .then( su => {
+            console.log("Sucesso: " , su);
+            alert(su);
+        })
+        .fail( erro => {
+            console.log("ERRO: ", erro);
+        });
+    }
+
+</script>
+
+{% endblock javascripts %}
