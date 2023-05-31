@@ -34,12 +34,54 @@ def index(request):
 @login_required(login_url="/login/")
 def call_simulation(request):
     print(request)
-    variavel = [{
+    variavel = {
         'valora': 'oi',
         'valorb': 'ola',
-    }]
+    }
+    inputName = request.POST['groupName']
+    gargalo = Group(name=inputName, home=eden)
+    gargalo.generate_gargalo(10)
+    eden.pass_day()
+    info = gargalo.get_info()
+    variavel['info'] = info
+    family = gargalo.get_family()
+    hv = gargalo.hvs[5]
+    info_hv = hv.get_info(show_genes=False, show_action=True, show_visible=False)  
+    variavel['info_hv'] = info_hv
+    genes = hv.get_genes()
+    variavel['genes'] = genes.tolist()
+    traits = hv.genes.phenotype.traits
+    print('traits:', traits)
+    variavel['traits'] = traits
+    indicators = hv.history.get_indicators()
+    print('indicators: ', indicators)
+    variavel['indicators'] = indicators
+    y_actions = hv.history.get_counter()
+    print('y_actions: ', type(y_actions))
+    variavel['y_actions'] = list(y_actions)
 
-    return JsonResponse(variavel[0])
+    data_gene = gargalo.history.get_genes()
+    print('data_gene: ', type(data_gene))
+    variavel['data_gene'] = data_gene.tolist()
+    
+    # group_y_genes, group_y_traits, group_y_actions = gargalo.history.get_indicators()
+    # # print('group_y: ', group_y_genes, group_y_traits, group_y_actions)
+
+    # gg_y_genes = []
+    # for g in group_y_genes:
+    #     gg_y_genes[g] = group_y_genes[g]
+        
+    # print('gg_y_genes: ', gg_y_genes)
+    # variavel['group_y_genes'] = gg_y_genes
+    # variavel['group_y_traits'] = list(group_y_traits)
+    # variavel['group_y_actions'] = list(group_y_actions)
+
+
+    variavel['family'] = family
+    # variavel['profiles'] = gargalo.get_profiles()
+    variavel['group_name'] = gargalo.name
+
+    return JsonResponse(variavel)
 
 
 @login_required(login_url="/login/")

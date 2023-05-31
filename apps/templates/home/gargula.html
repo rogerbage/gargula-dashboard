@@ -12,7 +12,7 @@
             <div class="col-12">
                 <div class="card card-chart">
                     <form method="post" action="call_simulation">
-                        <input type="text" name="algo" value="">
+                        <input type="text" name="group_name" id="group_name" value="">
                         {% csrf_token %}
                         <button onclick="callSimulation(event)">Chamar Simulação</button>
                     </form>
@@ -39,7 +39,7 @@
             url: 'call_simulation',
             type: 'post',
             data: {
-                algo: "alguma coisa",
+                groupName: group_name.value,
                 csrfmiddlewaretoken: document.querySelector('[name=csrfmiddlewaretoken]').value,
             },
             dataType: 'json',
